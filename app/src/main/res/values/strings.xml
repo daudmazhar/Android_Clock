@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Cock App 2</string>
+    <string name="main_screen_heading">Favorite Cities</string>
+    <string name="addCityButton">Add City</string>
+</resources>
