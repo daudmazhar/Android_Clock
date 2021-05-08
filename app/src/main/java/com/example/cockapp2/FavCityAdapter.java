@@ -50,6 +50,4 @@ public class FavCityAdapter extends ArrayAdapter<CityTime> {
     public int getCount() {
         return cities.size();
     }
-
-
 }

@@ -26,7 +26,7 @@ public class CityListAdapter extends ArrayAdapter<CityTime> implements Filterabl
         this.filteredcities = cities;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+  //  @RequiresApi(api = Build.VERSION_CODES.O)
     public View getView(int position, View convertView, ViewGroup parent) {
         CityTime city = getItem(position);
 

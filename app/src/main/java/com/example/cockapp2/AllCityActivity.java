@@ -29,49 +29,47 @@ public class AllCityActivity extends AppCompatActivity {
     ListView list;
     EditText text;
     CityListAdapter adapter;
+    private DataLayerInterface dao;
     final int REQUEST_CODE = 2;
-    @RequiresApi(api = Build.VERSION_CODES.O)
+   // @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        if(selectedItems == null)
-            selectedItems = new ArrayList<CityTime>();
-        selectedItems = (ArrayList<CityTime>) intent.getSerializableExtra("list");
+        dao = new MySQLite(getApplicationContext());
+        long[] zones = {0, 30, -600, -240, -180, -180, -180, 300, 240, 240, 180, -120, -120, -180, -120, -180 };
 
-        if (cities == null) {
-            cities = new ArrayList<CityTime>();
-            cities.add(new CityTime("Islamabad", "Pakistan"));
-            cities.add(new CityTime("New Delhi", "India"));
-            cities.add(new CityTime("Washington DC", "USA"));
-            cities.add(new CityTime("London", "England"));
-            cities.add(new CityTime("Paris", "France"));
-            cities.add(new CityTime("Berlin", "Germany"));
-            cities.add(new CityTime("Stockholm", "Sweden"));
-            cities.add(new CityTime("Canberra", "Australia"));
-            cities.add(new CityTime("Tokyo", "Japan"));
-            cities.add(new CityTime("Seoul", "South Korea"));
-            cities.add(new CityTime("Beijing", "China"));
-            cities.add(new CityTime("Moscow", "Russia"));
-            cities.add(new CityTime("Ankara", "Turkey"));
-            cities.add(new CityTime("Cairo", "Egypt"));
-            cities.add(new CityTime("Helsinki", "Finland"));
-            cities.add(new CityTime("Prague", "Czech Republic"));
-        }
-        setCheckedCities();
-        createView();
+        if(dao.isEmpty()) {
+            if (cities == null) {
+                cities = new ArrayList<CityTime>();
+                cities.add(new CityTime("Islamabad", "Pakistan", 0, dao));
+                cities.add(new CityTime("New Delhi", "India", 30,dao));
+                cities.add(new CityTime("Washington DC", "USA", -600, dao));
+                cities.add(new CityTime("London", "England", -240,dao));
+                cities.add(new CityTime("Paris", "France", -180,dao));
+                cities.add(new CityTime("Berlin", "Germany", -180,dao));
+                cities.add(new CityTime("Stockholm", "Sweden", -180,dao));
+                cities.add(new CityTime("Canberra", "Australia", 300,dao));
+                cities.add(new CityTime("Tokyo", "Japan", 240,dao));
+                cities.add(new CityTime("Seoul", "South Korea", 240,dao));
+                cities.add(new CityTime("Beijing", "China", 180,dao));
+                cities.add(new CityTime("Moscow", "Russia", -120,dao));
+                cities.add(new CityTime("Ankara", "Turkey", -120,dao));
+                cities.add(new CityTime("Cairo", "Egypt", -180,dao));
+                cities.add(new CityTime("Helsinki", "Finland", -120,dao));
+                cities.add(new CityTime("Prague", "Czech Republic", -180,dao));
 
-    }
-
-    private void setCheckedCities(){
-        for (int i = 0; i < cities.size(); i++){
-            for(int j = 0; j < selectedItems.size(); j++){
-                if(cities.get(i).getCity().equals(selectedItems.get(j).getCity())){
-                    cities.get(i).setImportance(true);
+                for (int i = 0; i < cities.size(); i++){
+                    cities.get(i).saveCityToStorage();
                 }
             }
         }
-        selectedItems.clear();
+        else{
+            cities = new ArrayList<CityTime>();
+            cities = dao.loadCities(true);
+        }
+        createView();
+
     }
 
     private EditText createText(){
@@ -130,24 +128,16 @@ public class AllCityActivity extends AppCompatActivity {
 
             boolean checked = ((CheckBox) v).isChecked();
             currentCity = (CityTime)((CheckBox) v).getTag();
-
             if(currentCity.isImportant() == false)
-                currentCity.setImportance(true);
+                dao.updateImportance(currentCity.getCity(), "true");
             else
-                currentCity.setImportance(false);
+                dao.updateImportance(currentCity.getCity(), "false");
 
     }
 
     private void prepareResult(){
 
             Intent intent = new Intent(this, MainActivity.class);
-            selectedItems = new ArrayList<CityTime>();
-            for(int i = 0; i < cities.size(); i++){
-                if(cities.get(i).isImportant()){
-                    selectedItems.add(cities.get(i));
-                }
-            }
-            intent.putExtra("fav", selectedItems);
             setResult(RESULT_OK, intent);
 
     }
