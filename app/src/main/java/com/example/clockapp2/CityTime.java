@@ -1,14 +1,10 @@
-package com.example.cockapp2;
-import android.content.pm.LauncherApps;
+package com.example.clockapp2;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
 import java.io.Serializable;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Hashtable;
 

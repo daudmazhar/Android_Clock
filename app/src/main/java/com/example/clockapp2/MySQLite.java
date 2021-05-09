@@ -1,4 +1,4 @@
-package com.example.cockapp2;
+package com.example.clockapp2;
 
 import android.content.ContentValues;
 import android.content.Context;
